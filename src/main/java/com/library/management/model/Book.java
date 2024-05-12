@@ -20,6 +20,6 @@ public class Book {
     private int publicationYear;
     private String isbn;
 
-    private boolean availableForBorrowing;
+    private boolean availableForBorrow;
 
 }
