@@ -1,5 +1,6 @@
 package com.library.management.service;
 
+import com.library.management.dto.BookRequest;
 import com.library.management.exception.BookNotFoundException;
 import com.library.management.model.Book;
 import com.library.management.repository.BookRepository;
@@ -61,34 +62,59 @@ class BookServiceImpleTest {
 
     @Test
      void addBookTest() {
+        BookRequest bookRequest = new BookRequest();
+        bookRequest.setTitle("Title");
+        bookRequest.setAuthor("Author");
+        bookRequest.setPublicationYear(2021);
+        bookRequest.setIsbn("1234567890");
+
         Book book = new Book();
+        book.setTitle("Title");
+        book.setAuthor("Author");
+        book.setPublicationYear(2021);
+        book.setIsbn("1234567890");
+
         when(bookRepository.save(any(Book.class))).thenReturn(book);
 
-        Book result = bookServiceImple.addBook(book);
+        Book result = bookServiceImple.addBook(bookRequest);
 
-        assertEquals(book, result);
-        verify(bookRepository, times(1)).save(book);
+        assertEquals("Title", result.getTitle());
+        assertEquals("Author", result.getAuthor());
+        assertEquals(2021, result.getPublicationYear());
+        assertEquals("1234567890", result.getIsbn());
+        verify(bookRepository, times(1)).save(any(Book.class));
     }
 
     @Test
      void updateBookTest() {
+        BookRequest updatedBook = new BookRequest();
+        updatedBook.setTitle("Updated Title");
+        updatedBook.setAuthor("Updated Author");
+        updatedBook.setPublicationYear(2022);
+        updatedBook.setIsbn("0987654321");
+
         Book book = new Book();
-        book.setId(1L);
+        book.setTitle("Title");
+        book.setAuthor("Author");
+        book.setPublicationYear(2021);
+        book.setIsbn("1234567890");
+
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
         when(bookRepository.save(any(Book.class))).thenReturn(book);
 
-        Book updatedBook = new Book();
-        updatedBook.setTitle("Updated Title");
         Book result = bookServiceImple.updateBook(1L, updatedBook);
 
         assertEquals("Updated Title", result.getTitle());
+        assertEquals("Updated Author", result.getAuthor());
+        assertEquals(2022, result.getPublicationYear());
+        assertEquals("0987654321", result.getIsbn());
         verify(bookRepository, times(1)).findById(1L);
         verify(bookRepository, times(1)).save(any(Book.class));
     }
 
     @Test
      void updateBookNotFoundTest() {
-        Book updatedBook = new Book();
+        BookRequest updatedBook = new BookRequest();
         updatedBook.setTitle("Updated Title");
         when(bookRepository.findById(1L)).thenReturn(Optional.empty());
 
