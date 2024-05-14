@@ -1,10 +1,9 @@
 package com.library.management.controller;
 
-import com.library.management.dto.Response;
+
 import com.library.management.model.Patron;
 import com.library.management.service.PatronService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,39 +11,38 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/patrons")
-@RequiredArgsConstructor
 public class PatronController {
 
+    private final PatronService patronService;
 
-    private  final PatronService patronService;
+    @Autowired
+    public PatronController(PatronService patronService) {
+        this.patronService = patronService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<Patron>> getAllPatrons() {
-        List<Patron> patrons = patronService.getAllPatrons();
-        return ResponseEntity.ok().body(patrons);
+    public List<Patron> getAllPatrons() {
+        return patronService.getAllPatrons();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patron> getPatronById(@PathVariable("id") Long id) {
-        Patron patron = patronService.getPatronById(id);
-        return ResponseEntity.ok().body(patron);
+    public Patron getPatronById(@PathVariable Long id) {
+        return patronService.getPatronById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Patron> addPatron(@RequestBody Patron patron) {
-        Patron savedPatron = patronService.addPatron(patron);
-        return new ResponseEntity<>(savedPatron, HttpStatus.CREATED);
+    public Patron addPatron(@RequestBody Patron patron) {
+        return patronService.addPatron(patron);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Patron> updatePatron(@PathVariable("id") Long id, @RequestBody Patron patron) {
-        Patron updatedPatron = patronService.updatePatron(id, patron);
-        return ResponseEntity.ok().body(updatedPatron);
+    public Patron updatePatron(@PathVariable Long id, @RequestBody Patron patron) {
+        return patronService.updatePatron(id, patron);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response> deletePatron(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deletePatron(@PathVariable Long id) {
         patronService.deletePatron(id);
-        return new ResponseEntity<>(new Response<>("Patron deleted successfully", true, HttpStatus.OK.value()), HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

@@ -26,7 +26,7 @@ public class User {
 
     // this will work as our default user
     @Enumerated(EnumType.STRING)
-    private Role role =  Role.User;
+    private Role role =  Role.PUBLIC_USER;
 
 
 

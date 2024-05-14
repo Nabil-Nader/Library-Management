@@ -21,4 +21,3 @@ public class AccessDeniedHandler implements org.springframework.security.web.acc
     }
 }
 
-
