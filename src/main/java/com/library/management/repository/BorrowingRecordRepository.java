@@ -7,7 +7,5 @@ import java.util.Optional;
 
 public interface BorrowingRecordRepository extends JpaRepository<BorrowingRecord, Long>{
 
-
-
-   Optional<BorrowingRecord>  findByBookIdAndPatronIdAndReturnDateIsNull(Long bookId, Long patronId);
+   BorrowingRecord  findByBookIdAndPatronIdAndReturnDateIsNull(Long bookId, Long patronId);
 }

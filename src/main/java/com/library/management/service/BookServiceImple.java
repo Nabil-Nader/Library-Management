@@ -1,9 +1,11 @@
 package com.library.management.service;
 
+import com.library.management.dto.BookRequest;
 import com.library.management.exception.BookNotFoundException;
 import com.library.management.model.Book;
 import com.library.management.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class BookServiceImple  implements BookService{
 
     private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<Book> getAllBooks() {
@@ -26,12 +29,13 @@ public class BookServiceImple  implements BookService{
     }
 
     @Override
-    public Book addBook(Book book) {
+    public Book addBook(BookRequest bookRequest) {
+        Book book = modelMapper.map(bookRequest,Book.class);
         return bookRepository.save(book);
     }
 
     @Override
-    public Book updateBook(Long id, Book book) {
+    public Book updateBook(Long id, BookRequest book) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if(optionalBook.isPresent()){
             Book updatedBook = optionalBook.get();
